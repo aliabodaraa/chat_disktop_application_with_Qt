@@ -108,6 +108,19 @@ void ChatClient::jsonReceived(const QJsonObject &docObj)
         // we notify of the user disconnection the userLeft signal
         emit userLeft(usernameVal.toString());
     }
+
+
+
+
+    else if (typeVal.toString().compare(QLatin1String("online"), Qt::CaseInsensitive) == 0) { //to show online users
+        // we extract the username of the new user
+       const QJsonValue usernameVal = docObj.value(QLatin1String("users"));
+       if (usernameVal.isNull() || !usernameVal.isArray())
+           return; // the username was invalid so we ignore
+       // we notify of the user disconnection the userLeft signal
+       emit onlineUsers(usernameVal.toArray());
+
+   }
 }
 
 void ChatClient::connectToServer(const QHostAddress &address, quint16 port)

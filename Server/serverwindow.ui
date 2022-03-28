@@ -16,6 +16,9 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="label">
+     <property name="styleSheet">
+      <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
+     </property>
      <property name="text">
       <string>Server Log</string>
      </property>
@@ -23,6 +26,11 @@
    </item>
    <item row="1" column="0" colspan="2">
     <widget class="QPlainTextEdit" name="logEditor">
+     <property name="styleSheet">
+      <string notr="true">border-radius: 4;
+background-color: #fff;
+border:1px solid #888;</string>
+     </property>
      <property name="readOnly">
       <bool>true</bool>
      </property>

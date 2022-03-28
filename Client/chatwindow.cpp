@@ -31,6 +31,8 @@ ChatWindow::ChatWindow(QWidget *parent)
     // connect the click of the "send" button and the press of the enter while typing to the slot that sends the message
     connect(ui->sendButton, &QPushButton::clicked, this, &ChatWindow::sendMessage);
     connect(ui->messageEdit, &QLineEdit::returnPressed, this, &ChatWindow::sendMessage);
+    connect(m_chatClient, &ChatClient::onlineUsers, this, &ChatWindow::reciveOnlineUsers);
+
 }
 
 ChatWindow::~ChatWindow()
@@ -81,7 +83,11 @@ void ChatWindow::loggedIn()
     ui->sendButton->setEnabled(true);
     ui->messageEdit->setEnabled(true);
     ui->chatView->setEnabled(true);
+    int newRow = m_chatModel->rowCount();
+    m_chatModel->insertRow(newRow);
+    m_chatModel->setData(m_chatModel->index(newRow, 0),"Hello From My App-Chat");
     // clear the user name record
+     ui->chatView->scrollToBottom();
     m_lastUserName.clear();
 }
 
@@ -124,6 +130,7 @@ void ChatWindow::messageReceived(const QString &sender, const QString &text)
     m_chatModel->setData(m_chatModel->index(newRow, 0), int(Qt::AlignLeft | Qt::AlignVCenter), Qt::TextAlignmentRole);
     // scroll the view to display the new message
     ui->chatView->scrollToBottom();
+    ui->listWidget->clear();
 }
 
 void ChatWindow::sendMessage()
@@ -145,6 +152,8 @@ void ChatWindow::sendMessage()
     ui->chatView->scrollToBottom();
     // reset the last printed username
     m_lastUserName.clear();
+
+    ui->listWidget->clear();
 }
 
 void ChatWindow::disconnectedFromServer()
@@ -178,6 +187,9 @@ void ChatWindow::userJoined(const QString &username)
     ui->chatView->scrollToBottom();
     // reset the last printed username
     m_lastUserName.clear();
+
+
+    ui->listWidget->clear();
 }
 void ChatWindow::userLeft(const QString &username)
 {
@@ -259,3 +271,18 @@ void ChatWindow::error(QAbstractSocket::SocketError socketError)
     // reset the last printed username
     m_lastUserName.clear();
 }
+
+void ChatWindow::reciveOnlineUsers(const QJsonArray &users)
+{
+    for(int i=0;i<users.size();i++)
+    {
+        ui->listWidget->addItem(users.at(i).toString());
+        const int newRow = m_chatModel->rowCount();
+        if(m_lastUserName!=users[i].toString()){
+            // insert a row
+            m_chatModel->insertRow(newRow);
+
+            }
+        }
+
+    }

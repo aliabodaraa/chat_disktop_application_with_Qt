@@ -1,8 +1,11 @@
 #include "chatserver.h"
 #include "serverworker.h"
+#include <QThread>
 #include <functional>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
+
 #include <QJsonValue>
 #include <QTimer>
 ChatServer::ChatServer(QObject *parent)
@@ -32,7 +35,8 @@ void ChatServer::broadcast(const QJsonObject &message, ServerWorker *exclude)
 {
     for (ServerWorker *worker : m_clients) {
         Q_ASSERT(worker);
-        if (worker == exclude)
+        //asssss add the second condition
+        if (worker == exclude && !message.contains("users") )
             continue;
         sendJson(worker, message);
     }
@@ -43,8 +47,25 @@ void ChatServer::jsonReceived(ServerWorker *sender, const QJsonObject &doc)
     Q_ASSERT(sender);
     emit logMessage(QLatin1String("JSON received ") + QString::fromUtf8(QJsonDocument(doc).toJson()));
     if (sender->userName().isEmpty())
-        return jsonFromLoggedOut(sender, doc);
-    jsonFromLoggedIn(sender, doc);
+         jsonFromLoggedOut(sender, doc);
+    else
+        jsonFromLoggedIn(sender, doc);
+
+//implement Online Users----------------
+
+    QJsonArray array = {};
+    for(int i=0;i<m_clients.size();i++)
+      array.append(QString(m_clients.at(i)->userName()));
+
+    QJsonObject message;
+    message[QStringLiteral("type")] = QStringLiteral("online");
+
+    message[QStringLiteral("users")] = array;
+    message[QStringLiteral("sender")] = sender->userName();
+    broadcast(message, sender);
+
+//----------------
+
 }
 
 void ChatServer::userDisconnected(ServerWorker *sender)
@@ -59,6 +80,20 @@ void ChatServer::userDisconnected(ServerWorker *sender)
         emit logMessage(userName + QLatin1String(" disconnected"));
     }
     sender->deleteLater();
+
+    //asssss----------------
+
+      /*  QJsonArray array = {};
+        for(int i=0;i<m_clients.size();i++)
+           array.append(QString(m_clients.at(i)->userName()));
+
+        QJsonObject message;
+        message[QStringLiteral("type")] = QStringLiteral("online");
+        message[QStringLiteral("users")] = array;
+        message[QStringLiteral("sender")] = sender->userName();
+        broadcast(message, sender);*/
+
+       //asssss----------------
 }
 
 void ChatServer::userError(ServerWorker *sender)

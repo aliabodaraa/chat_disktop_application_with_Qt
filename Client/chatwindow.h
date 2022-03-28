@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QAbstractSocket>
+
 class ChatClient;
 class QStandardItemModel;
 namespace Ui { class ChatWindow; }
@@ -30,6 +31,7 @@ private slots:
     void userJoined(const QString &username);
     void userLeft(const QString &username);
     void error(QAbstractSocket::SocketError socketError);
+    void reciveOnlineUsers(const QJsonArray &users);
 };
 
 #endif // CHATWINDOW_H

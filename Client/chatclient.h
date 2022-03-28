@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QTcpSocket>
+#include <QJsonArray>
+
 class QHostAddress;
 class QJsonDocument;
 class ChatClient : public QObject
@@ -14,6 +16,7 @@ public:
 public slots:
     void connectToServer(const QHostAddress &address, quint16 port);
     void login(const QString &userName);
+    /// sends a message to the connected user
     void sendMessage(const QString &text);
     void disconnectFromHost();
 private slots:
@@ -27,6 +30,7 @@ signals:
     void error(QAbstractSocket::SocketError socketError);
     void userJoined(const QString &username);
     void userLeft(const QString &username);
+    void onlineUsers(const QJsonArray &username);
 private:
     QTcpSocket *m_clientSocket;
     bool m_loggedIn;

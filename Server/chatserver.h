@@ -3,6 +3,7 @@
 
 #include <QTcpServer>
 #include <QVector>
+
 class ServerWorker;
 class ChatServer : public QTcpServer
 {
