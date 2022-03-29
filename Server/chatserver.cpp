@@ -8,10 +8,9 @@
 
 #include <QJsonValue>
 #include <QTimer>
+#include<QDebug>
 ChatServer::ChatServer(QObject *parent)
-    : QTcpServer(parent)
-{}
-
+    : QTcpServer(parent){}
 void ChatServer::incomingConnection(qintptr socketDescriptor)
 {
     ServerWorker *worker = new ServerWorker(this);
@@ -35,13 +34,11 @@ void ChatServer::broadcast(const QJsonObject &message, ServerWorker *exclude)
 {
     for (ServerWorker *worker : m_clients) {
         Q_ASSERT(worker);
-        //asssss add the second condition
         if (worker == exclude && !message.contains("users") )
             continue;
         sendJson(worker, message);
     }
 }
-
 void ChatServer::jsonReceived(ServerWorker *sender, const QJsonObject &doc)
 {
     Q_ASSERT(sender);
@@ -49,25 +46,8 @@ void ChatServer::jsonReceived(ServerWorker *sender, const QJsonObject &doc)
     if (sender->userName().isEmpty())
          jsonFromLoggedOut(sender, doc);
     else
-        jsonFromLoggedIn(sender, doc);
-
-//implement Online Users----------------
-
-    QJsonArray array = {};
-    for(int i=0;i<m_clients.size();i++)
-      array.append(QString(m_clients.at(i)->userName()));
-
-    QJsonObject message;
-    message[QStringLiteral("type")] = QStringLiteral("online");
-
-    message[QStringLiteral("users")] = array;
-    message[QStringLiteral("sender")] = sender->userName();
-    broadcast(message, sender);
-
-//----------------
-
+         jsonFromLoggedIn(sender, doc);
 }
-
 void ChatServer::userDisconnected(ServerWorker *sender)
 {
     m_clients.removeAll(sender);
@@ -80,20 +60,6 @@ void ChatServer::userDisconnected(ServerWorker *sender)
         emit logMessage(userName + QLatin1String(" disconnected"));
     }
     sender->deleteLater();
-
-    //asssss----------------
-
-      /*  QJsonArray array = {};
-        for(int i=0;i<m_clients.size();i++)
-           array.append(QString(m_clients.at(i)->userName()));
-
-        QJsonObject message;
-        message[QStringLiteral("type")] = QStringLiteral("online");
-        message[QStringLiteral("users")] = array;
-        message[QStringLiteral("sender")] = sender->userName();
-        broadcast(message, sender);*/
-
-       //asssss----------------
 }
 
 void ChatServer::userError(ServerWorker *sender)
@@ -145,6 +111,19 @@ void ChatServer::jsonFromLoggedOut(ServerWorker *sender, const QJsonObject &docO
     connectedMessage[QStringLiteral("type")] = QStringLiteral("newuser");
     connectedMessage[QStringLiteral("username")] = newUserName;
     broadcast(connectedMessage, sender);
+
+    //implement Online Users----------------
+
+        QJsonArray array = {};
+        for(int i=0;i<m_clients.size();i++)
+          array.append(QString(m_clients.at(i)->userName()));
+
+        QJsonObject message;
+        message[QStringLiteral("type")] = QStringLiteral("online");
+
+        message[QStringLiteral("users")] = array;
+        message[QStringLiteral("sender")] = sender->userName();
+        broadcast(message, sender);
 }
 
 void ChatServer::jsonFromLoggedIn(ServerWorker *sender, const QJsonObject &docObj)
@@ -153,8 +132,7 @@ void ChatServer::jsonFromLoggedIn(ServerWorker *sender, const QJsonObject &docOb
     const QJsonValue typeVal = docObj.value(QLatin1String("type"));
     if (typeVal.isNull() || !typeVal.isString())
         return;
-    if (typeVal.toString().compare(QLatin1String("message"), Qt::CaseInsensitive) != 0)
-        return;
+
     const QJsonValue textVal = docObj.value(QLatin1String("text"));
     if (textVal.isNull() || !textVal.isString())
         return;
@@ -162,10 +140,26 @@ void ChatServer::jsonFromLoggedIn(ServerWorker *sender, const QJsonObject &docOb
     if (text.isEmpty())
         return;
     QJsonObject message;
-    message[QStringLiteral("type")] = QStringLiteral("message");
-    message[QStringLiteral("text")] = text;
-    message[QStringLiteral("sender")] = sender->userName();
-    broadcast(message, sender);
-}
+    qDebug()<<"11111111";
+    if(typeVal.toString().compare(QLatin1String("private"), Qt::CaseInsensitive) == 0){
+         //qDebug()<<"111111222222";
+         message[QStringLiteral("type")] = QLatin1String("private");
+         message[QStringLiteral("text")] = text;
+         message[QStringLiteral("sender")] = sender->userName();
+         message[QStringLiteral("reciever")] = docObj.value(QLatin1String("reciever"));
 
+         for(int i=0;i<m_clients.size();i++)
+            if(m_clients.at(i)->userName()== docObj.value(QLatin1String("reciever")).toString().trimmed())
+                   sendJson(m_clients.at(i),message);
+
+    }
+    if (typeVal.toString().compare(QLatin1String("message"), Qt::CaseInsensitive) == 0)
+    {
+         message[QStringLiteral("type")] = QLatin1String("message");
+         message[QStringLiteral("text")] = text;
+         message[QStringLiteral("sender")] = sender->userName();
+         broadcast(message,sender);
+    }
+
+}
 

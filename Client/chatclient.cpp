@@ -21,9 +21,9 @@ ChatClient::ChatClient(QObject *parent)
     // Reset the m_loggedIn variable when we disconnec. Since the operation is trivial we use a lambda instead of creating another slot
     connect(m_clientSocket, &QTcpSocket::disconnected, this, [this]()->void{m_loggedIn = false;});
 }
-
 void ChatClient::login(const QString &userName)
 {
+    currentNameUser=userName;//take the name of user when logging in
     if (m_clientSocket->state() == QAbstractSocket::ConnectedState) { // if the client is connected
         // create a QDataStream operating on the socket
         QDataStream clientStream(m_clientSocket);
@@ -108,10 +108,6 @@ void ChatClient::jsonReceived(const QJsonObject &docObj)
         // we notify of the user disconnection the userLeft signal
         emit userLeft(usernameVal.toString());
     }
-
-
-
-
     else if (typeVal.toString().compare(QLatin1String("online"), Qt::CaseInsensitive) == 0) { //to show online users
         // we extract the username of the new user
        const QJsonValue usernameVal = docObj.value(QLatin1String("users"));
@@ -119,8 +115,38 @@ void ChatClient::jsonReceived(const QJsonObject &docObj)
            return; // the username was invalid so we ignore
        // we notify of the user disconnection the userLeft signal
        emit onlineUsers(usernameVal.toArray());
-
    }
+    //for chat with one user
+    else if (typeVal.toString().compare(QLatin1String("private"), Qt::CaseInsensitive) == 0) {
+        const QJsonValue textVal = docObj.value(QLatin1String("text"));
+        if (textVal.isNull() || !textVal.isString())
+            return;
+        const QJsonValue senderVal = docObj.value(QLatin1String("sender"));
+        if (senderVal.isNull() || !senderVal.isString())
+            return;
+
+        const QJsonValue recieverVal = docObj.value(QLatin1String("reciever"));
+        if (recieverVal.isNull() || !recieverVal.isString())
+            return;
+
+        emit SignalReceiveMessageFromSpecificUser(senderVal.toString(),textVal.toString());
+    }
+}
+ //for chat with one user
+void ChatClient::sendMessageToSelectedUser(const QString &msg,const QString &targetUserName){
+    if (msg.isEmpty())
+        return; // We don't send empty messages
+    // create a QDataStream operating on the socket
+    QDataStream clientStream(m_clientSocket);
+    // set the version so that programs compiled with different versions of Qt can agree on how to serialise
+    clientStream.setVersion(QDataStream::Qt_5_7);
+    // Create the JSON we want to send
+    QJsonObject message;
+    message[QStringLiteral("type")] = QStringLiteral("private");
+    message[QStringLiteral("text")] = msg;
+    message[QStringLiteral("reciever")] = targetUserName;
+    // send the JSON using QDataStream
+    clientStream << QJsonDocument(message).toJson();
 }
 
 void ChatClient::connectToServer(const QHostAddress &address, quint16 port)

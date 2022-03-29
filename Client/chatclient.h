@@ -13,6 +13,8 @@ class ChatClient : public QObject
     Q_DISABLE_COPY(ChatClient)
 public:
     explicit ChatClient(QObject *parent = nullptr);
+    QString currentNameUser;
+    void sendMessageToSelectedUser(const QString &msg,const QString &targetUserName );
 public slots:
     void connectToServer(const QHostAddress &address, quint16 port);
     void login(const QString &userName);
@@ -31,6 +33,7 @@ signals:
     void userJoined(const QString &username);
     void userLeft(const QString &username);
     void onlineUsers(const QJsonArray &username);
+    void SignalReceiveMessageFromSpecificUser(QString senderVal,QString textVal);//for chat with one user
 private:
     QTcpSocket *m_clientSocket;
     bool m_loggedIn;

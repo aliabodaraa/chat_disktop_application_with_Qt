@@ -33,8 +33,8 @@ ChatWindow::ChatWindow(QWidget *parent)
     connect(ui->sendButton, &QPushButton::clicked, this, &ChatWindow::sendMessage);
     connect(ui->messageEdit, &QLineEdit::returnPressed, this, &ChatWindow::sendMessage);
     connect(m_chatClient, &ChatClient::onlineUsers, this, &ChatWindow::reciveOnlineUsers);
-    //for chat with one user
-    connect(m_chatClient, &ChatClient::SignalReceiveMessageFromSpecificUser, this, &ChatWindow::receiveMessageFromSpecificUser,Qt::QueuedConnection);
+
+    connect(m_chatClient, &ChatClient::SignalReceiveMessageFromSpecificUser, this, &ChatWindow::receiveMessageFromSpecificUser);
 }
 
 ChatWindow::~ChatWindow()
@@ -155,7 +155,7 @@ void ChatWindow::sendMessage()
     // reset the last printed username
     m_lastUserName.clear();
     //prevent user name appearin the list of online users
-    //ui->listWidget->clear();
+    ui->listWidget->clear();
 }
 
 void ChatWindow::disconnectedFromServer()
@@ -286,9 +286,9 @@ void ChatWindow::reciveOnlineUsers(const QJsonArray &users){
 
 
 //for chat with one user
-void ChatWindow::on_ButtonChatOneUser_clicked()
+void ChatWindow::on_chat_with_selected_user_clicked()
 {
-    if(ui->listWidget->count()>0 && ui->listWidget->selectedItems().count()>0){
+    if( ui->listWidget->count()>0 && ui->listWidget->selectedItems().count()>0){
         QString userNameSelected=ui->listWidget->currentItem()->text();
         if(this->privateChats.contains(userNameSelected))
           return;

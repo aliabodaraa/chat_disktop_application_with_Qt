@@ -14,6 +14,7 @@ public:
     QString userName() const;
     void setUserName(const QString &userName);
     void sendJson(const QJsonObject &jsonData);
+    QString getUserName();
 signals:
     void jsonReceived(const QJsonObject &jsonDoc);
     void disconnectedFromClient();

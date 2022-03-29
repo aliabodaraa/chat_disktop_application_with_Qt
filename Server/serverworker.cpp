@@ -86,5 +86,7 @@ void ServerWorker::receiveJson()
         }
     }
 }
-
+QString ServerWorker::getUserName(){
+    return this->userName();
+}
 
