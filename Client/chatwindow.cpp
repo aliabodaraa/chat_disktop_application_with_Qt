@@ -36,7 +36,7 @@ ChatWindow::ChatWindow(QWidget *parent)
     connect(m_chatClient, &ChatClient::onlineUsers, this, &ChatWindow::reciveOnlineUsers);
     //for chat with one user
     connect(m_chatClient, &ChatClient::SignalReceiveMessageFromSpecificUser, this, &ChatWindow::receiveMessageFromSpecificUser,Qt::QueuedConnection);
-}
+  }
 
 ChatWindow::~ChatWindow()
 {
@@ -84,6 +84,7 @@ void ChatWindow::loggedIn()
 {
     ui->listWidget->clear();
     emit userJoined("Welcome "+m_chatClient->currentNameUser+", You have been \n");
+    ui->nameUser->setText(m_chatClient->currentNameUser);
     // once we successully log in we enable the ui to display and send messages
     ui->sendButton->setEnabled(true);
     ui->messageEdit->setEnabled(true);
@@ -209,7 +210,6 @@ void ChatWindow::userLeft(const QString &username)
     ui->chatView->scrollToBottom();
     // reset the last printed username
     m_lastUserName.clear();
-    ui->listWidget->clear();
 }
 
 void ChatWindow::error(QAbstractSocket::SocketError socketError)
@@ -284,7 +284,6 @@ void ChatWindow::reciveOnlineUsers(const QJsonArray &users){
         ui->listWidget->addItem(users.at(i).toString());
     }
   }
-
 
 //for chat with one user
 void ChatWindow::on_ButtonChatOneUser_clicked()

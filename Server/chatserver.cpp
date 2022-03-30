@@ -60,6 +60,16 @@ void ChatServer::userDisconnected(ServerWorker *sender)
         emit logMessage(userName + QLatin1String(" disconnected"));
     }
     sender->deleteLater();
+    //implement Online Users that for update users when any user disconnecting the serve----------------
+        QJsonArray array = {};
+        for(int i=0;i<m_clients.size();i++)
+          array.append(QString(m_clients.at(i)->userName()));
+
+        QJsonObject message;
+        message[QStringLiteral("type")] = QStringLiteral("online");
+        message[QStringLiteral("users")] = array;
+        message[QStringLiteral("sender")] = sender->userName();
+        broadcast(message, sender);
 }
 
 void ChatServer::userError(ServerWorker *sender)
@@ -117,10 +127,8 @@ void ChatServer::jsonFromLoggedOut(ServerWorker *sender, const QJsonObject &docO
         QJsonArray array = {};
         for(int i=0;i<m_clients.size();i++)
           array.append(QString(m_clients.at(i)->userName()));
-
         QJsonObject message;
         message[QStringLiteral("type")] = QStringLiteral("online");
-
         message[QStringLiteral("users")] = array;
         message[QStringLiteral("sender")] = sender->userName();
         broadcast(message, sender);

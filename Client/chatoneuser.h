@@ -20,6 +20,8 @@ private slots:
     void recieveMsgInDialog(QString sender, QString text);
     /// @brief this method represents send message operation that i had selected from listWidget in chatWindow
     void on_pushButton_clicked();
+    void closeEvent(QCloseEvent *event);
+
 private:
     Ui::chatOneUser *ui;
     /// @brief the trget user that i can currently send messages for he
