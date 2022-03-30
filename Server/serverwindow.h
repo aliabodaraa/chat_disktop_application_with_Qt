@@ -19,7 +19,10 @@ private:
     Ui::ServerWindow *ui;
     ChatServer *m_chatServer;
 private slots:
+    /// @brief start server or stop it
     void toggleStartServer();
+    /// @brief for write on window
+    /// @param msg 
     void logMessage(const QString &msg);
 };
 

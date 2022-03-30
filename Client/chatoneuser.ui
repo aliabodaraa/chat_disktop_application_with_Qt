@@ -45,13 +45,19 @@ border:1px solid rgb(78, 157, 235);</string>
        <item>
         <widget class="QPushButton" name="pushButton">
          <property name="styleSheet">
-          <string notr="true">padding:2px;
+          <string notr="true">QPushButton {
+padding:2px;
 height:26%;
 width:10%;
 border-radius: 4;
-background-color: #457;
-border:1px solid #888;
-color:white;</string>
+background-color: #921;
+border:1px solid #921;
+color:white;}
+QPushButton:hover:!pressed
+{
+  border: 1px solid #789;
+ background-color: #789;
+}</string>
          </property>
          <property name="text">
           <string>Send</string>

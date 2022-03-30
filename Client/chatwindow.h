@@ -29,7 +29,7 @@ private:
     QString m_lastUserName;
     /// @brief represents a vector of users that any user can start chatting with any user in this vector
     QVector<QString> privateChats;
-
+    QVector<QString> groupChatVec;
 signals:
     /// @brief represents signal to trigger sending message to spesific user with new dialog
     void signalSendMsgToDialog(QString sender, QString text);//for chat with one user
@@ -72,6 +72,7 @@ private slots:
     void receiveMessageFromSpecificUser(QString senderVal,QString textVal);//for chat with one user
     /// @brief represents when the user want to chat with another user then he will select an user in list of online users then he this click to create dialog for unicast conversatin
     void on_ButtonChatOneUser_clicked();//for chat with one user
+    void on_creatnewgroup_clicked();
 };
 
 #endif // CHATWINDOW_H

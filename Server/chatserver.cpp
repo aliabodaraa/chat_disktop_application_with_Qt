@@ -140,7 +140,7 @@ void ChatServer::jsonFromLoggedIn(ServerWorker *sender, const QJsonObject &docOb
     if (text.isEmpty())
         return;
     QJsonObject message;
-    qDebug()<<"11111111";
+    //qDebug()<<"11111111";
     if(typeVal.toString().compare(QLatin1String("private"), Qt::CaseInsensitive) == 0){
          //qDebug()<<"111111222222";
          message[QStringLiteral("type")] = QLatin1String("private");

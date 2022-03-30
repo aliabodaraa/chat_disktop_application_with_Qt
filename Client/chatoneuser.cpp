@@ -22,14 +22,6 @@ QString chatOneUser::getSelectedUser()
     return targetUser;
 }
 
-void chatOneUser::sendMessageFromDialog()
-{
-    socketClient->sendMessageToSelectedUser(ui->lineEdit->text(),this->targetUser);
-    ui->listWidgetInDailog->addItem("From Me :");
-    ui->listWidgetInDailog->addItem(ui->lineEdit->text());
-    ui->lineEdit->setText("");
-}
-
 void chatOneUser::recieveMsgInDialog(QString sender, QString msg)
 {
     ui->listWidgetInDailog->addItem(sender+":");
@@ -38,5 +30,8 @@ void chatOneUser::recieveMsgInDialog(QString sender, QString msg)
 
 void chatOneUser::on_pushButton_clicked()
 {
-    this->sendMessageFromDialog();
+    socketClient->sendMessageToSelectedUser(ui->lineEdit->text(), this->targetUser);
+    ui->listWidgetInDailog->addItem("me :");
+    ui->listWidgetInDailog->addItem(ui->lineEdit->text());
+    ui->lineEdit->setText("");
 }

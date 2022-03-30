@@ -14,14 +14,17 @@ public:
     /// @brief represents constructor for class chatOneUser that pass params for
     explicit chatOneUser(QWidget *parent = nullptr,QString userNameTarget=QStringLiteral("") , ChatClient* socket=0);
     ~chatOneUser();
-    void sendMessageFromDialog();
     QString getSelectedUser();
 private slots:
+    /// @brief represents recieve message in priavte chat (Dialog)
     void recieveMsgInDialog(QString sender, QString text);
+    /// @brief this method represents send message operation that i had selected from listWidget in chatWindow
     void on_pushButton_clicked();
 private:
     Ui::chatOneUser *ui;
+    /// @brief the trget user that i can currently send messages for he
     QString targetUser;
+    /// @brief it represent socket from client side
     ChatClient *socketClient;
 };
 

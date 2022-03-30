@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>createGroupDialog</class>
  <widget class="QDialog" name="createGroupDialog">
@@ -5,13 +6,68 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>275</width>
+    <height>270</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <widget class="QListWidget" name="listWidgetMemberGroup">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>256</width>
+     <height>211</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QListWidget{
+border-radius: 4;
+background-color: rgb(248, 248, 248);
+border:1px solid rgb(78, 157, 235);
+}
+QListWidget::item{
+   color: white;
+   font-size:20px;
+   border: none;
+   height:25px;
+   margin:1px;
+   border-radius: 4;
+   background-color: #666;
+   border:1px solid #888;
+}
+
+QListWidget::item:hover:!pressed
+{
+  border: 1px solid #789;
+ background-color: #789;
+}</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>16</x>
+     <y>10</y>
+     <width>251</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 50 10pt &quot;MS Shell Dlg 2&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Hello From Chat Group ,you can see the members below</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

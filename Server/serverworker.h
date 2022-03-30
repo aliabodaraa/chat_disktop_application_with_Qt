@@ -11,9 +11,17 @@ class ServerWorker : public QObject
 public:
     explicit ServerWorker(QObject *parent = nullptr);
     virtual bool setSocketDescriptor(qintptr socketDescriptor);
+    /// @brief represents name of current user name 
+    /// @return name of current user
     QString userName() const;
+    /// @brief set the user name 
+    /// @param userName name of current user
     void setUserName(const QString &userName);
+    /// @brief read server the mssg to client
+    /// @param jsonData json data object the the server will read it
     void sendJson(const QJsonObject &jsonData);
+    /// @brief get priate user name
+    /// @return 
     QString getUserName();
 signals:
     void jsonReceived(const QJsonObject &jsonDoc);
@@ -21,6 +29,7 @@ signals:
     void error();
     void logMessage(const QString &msg);
 public slots:
+    /// @brief disconnect the connection with client
     void disconnectFromClient();
 private slots:
     void receiveJson();

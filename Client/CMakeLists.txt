@@ -12,6 +12,9 @@ add_executable(SimpleChatClient
     chatoneuser.cpp 
     chatoneuser.h
     chatoneuser.ui
+    creategroupdialog.h
+    creategroupdialog.cpp
+    creategroupdialog.ui
 )
 target_link_libraries(SimpleChatClient PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Network)
 set_target_properties(SimpleChatClient PROPERTIES

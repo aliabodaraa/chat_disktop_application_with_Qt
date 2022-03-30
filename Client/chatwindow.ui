@@ -13,23 +13,54 @@
   <property name="windowTitle">
    <string>Qt Simple Chat Client</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
   <property name="styleSheet">
    <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="3" column="0">
+    <widget class="QPushButton" name="creatnewgroup">
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+padding:2px;
+height:26%;
+width:10%;
+border-radius: 4;
+background-color: #567;
+border:1px solid #567;
+color:white;}
+QPushButton:hover:!pressed
+{
+  border: 1px solid #333;
+ background-color: #333;
+}</string>
+     </property>
+     <property name="text">
+      <string>Create New Group</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0" colspan="3">
     <widget class="QPushButton" name="connectButton">
      <property name="autoFillBackground">
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">padding:2px;
+      <string notr="true">QPushButton {
+padding:2px;
 height:26%;
 width:10%;
 border-radius: 4;
-background-color: #457;
-border:1px solid #888;
-color:white;</string>
+background-color: #456;
+border:1px solid #456;
+color:white;}
+QPushButton:hover:!pressed
+{
+  border: 1px solid #333;
+ background-color: #333;
+}</string>
      </property>
      <property name="text">
       <string>Connect</string>
@@ -121,9 +152,31 @@ QListWidget::item{
    border-radius: 4;
    background-color: #666;
    border:1px solid #888;
+}
+
+QListWidget::item:selected
+{
+  border: 1px solid #789;
+ background-color: #789;
 }</string>
      </property>
     </widget>
+   </item>
+   <item row="2" column="1">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Minimum</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>10</width>
+       <height>70</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item row="3" column="2">
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,7">
@@ -154,13 +207,19 @@ QListWidget::item{
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">padding:2px;
+        <string notr="true">QPushButton {
+padding:2px;
 height:26%;
 width:10%;
 border-radius: 4;
-background-color: #999;
-border:1px solid #888;
-color:white;</string>
+background-color: #921;
+border:1px solid #921;
+color:white;}
+QPushButton:hover:!pressed
+{
+  border: 1px solid #789;
+ background-color: #789;
+}</string>
        </property>
        <property name="text">
         <string>Send</string>
@@ -192,35 +251,25 @@ border:1px solid  rgb(78, 157, 235);</string>
      </item>
     </layout>
    </item>
-   <item row="2" column="1">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Minimum</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>10</width>
-       <height>70</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="0">
+   <item row="4" column="0" colspan="3">
     <widget class="QPushButton" name="ButtonChatOneUser">
      <property name="styleSheet">
-      <string notr="true">padding:2px;
+      <string notr="true">QPushButton {
+padding:2px;
 height:26%;
 width:10%;
 border-radius: 4;
-background-color: #457;
+background-color: #999;
 border:1px solid #888;
-color:white;</string>
+color:white;}
+QPushButton:hover:!pressed
+{
+  border: 1px solid #763;
+ background-color: #763;
+}</string>
      </property>
      <property name="text">
-      <string>chat with One User</string>
+      <string>chat with One User selected from online users</string>
      </property>
     </widget>
    </item>

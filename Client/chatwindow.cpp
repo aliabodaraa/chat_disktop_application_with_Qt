@@ -6,11 +6,12 @@
 #include <QMessageBox>
 #include <QHostAddress>
 #include "chatoneuser.h"
+#include"creategroupdialog.h"
 ChatWindow::ChatWindow(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::ChatWindow) // create the elements defined in the .ui file
-    , m_chatClient(new ChatClient(this)) // create the chat client
-    , m_chatModel(new QStandardItemModel(this)) // create the model to hold the messages
+    , ui(new Ui::ChatWindow)
+    , m_chatClient(new ChatClient(this))
+    , m_chatModel(new QStandardItemModel(this))
 {
     // set up of the .ui file
     ui->setupUi(this);
@@ -288,7 +289,7 @@ void ChatWindow::reciveOnlineUsers(const QJsonArray &users){
 //for chat with one user
 void ChatWindow::on_ButtonChatOneUser_clicked()
 {
-    if(ui->listWidget->count()>0 && ui->listWidget->selectedItems().count()>0){
+    if(ui->listWidget->selectedItems().count()>0){
         QString userNameSelected=ui->listWidget->currentItem()->text();
         if(this->privateChats.contains(userNameSelected))
           return;
@@ -297,6 +298,8 @@ void ChatWindow::on_ButtonChatOneUser_clicked()
         oneChatDialog.setModal(true);
         oneChatDialog.exec();
         this->privateChats.removeOne(userNameSelected);
+    }else{
+         QMessageBox::warning(this,"warning","You can't Create a group , there isn't any online user");
     }
 }
 void ChatWindow::receiveMessageFromSpecificUser(QString sender, QString text)
@@ -311,4 +314,22 @@ void ChatWindow::receiveMessageFromSpecificUser(QString sender, QString text)
         return;
     }
      emit signalSendMsgToDialog(sender,text);
+}
+
+void ChatWindow::on_creatnewgroup_clicked()
+{
+    if(ui->listWidget->selectedItems().count()>0){
+        QString userNameSelected=ui->listWidget->currentItem()->text();
+
+              this->groupChatVec.append(userNameSelected);
+       // qDebug() << groupChatVec;
+        createGroupDialog grp(this,groupChatVec,this->m_chatClient);
+        grp.setModal(true);
+        grp.exec();
+        for(int i=0;i<this->groupChatVec.length();i++)
+            if(this->groupChatVec.contains(groupChatVec[i]))
+                this->groupChatVec.removeOne(groupChatVec[i]);
+    }else{
+        QMessageBox::information(this,"warning","You should select users from online users");
+    }
 }
