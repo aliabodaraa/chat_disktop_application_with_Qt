@@ -1,6 +1,5 @@
 #ifndef CHATONEUSER_H
 #define CHATONEUSER_H
-
 #include <QDialog>
 #include "chatclient.h"
 namespace Ui {
@@ -12,7 +11,8 @@ class chatOneUser : public QDialog
     Q_OBJECT
 
 public:
-    explicit chatOneUser(QWidget *parent = 0,QString userNameTarget="" , ChatClient* socket=0);
+    /// @brief represents constructor for class chatOneUser that pass params for
+    explicit chatOneUser(QWidget *parent = nullptr,QString userNameTarget=QStringLiteral("") , ChatClient* socket=0);
     ~chatOneUser();
     void sendMessageFromDialog();
     QString getSelectedUser();

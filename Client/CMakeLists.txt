@@ -9,9 +9,11 @@ add_executable(SimpleChatClient
     chatwindow.ui
     chatwindow.h
     chatclient.h
+    chatoneuser.cpp 
+    chatoneuser.h
+    chatoneuser.ui
 )
 target_link_libraries(SimpleChatClient PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Network)
-target_compile_definitions(SimpleChatClient PRIVATE QT_NO_CAST_FROM_ASCII)
 set_target_properties(SimpleChatClient PROPERTIES
 	AUTOMOC ON
 	AUTOUIC ON
